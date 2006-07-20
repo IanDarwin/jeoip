@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!-- ====================================================================== 
+
+     jeoip    
+     gives the country code/country name from an IPV4 address
+                                                                                  
+     ====================================================================== -->
+<project name="project" default="jar">
+    <description>
+            See the comment on JeoIP.java
+    </description>
+
+    <!-- ================================= 
+          target: default              
+         ================================= -->
+    <target name="jar" depends="depends" description="--> description">
+        <jar file="jeoip.jar" basedir="build"
+        	excludes="**/*Test.class"
+			update="no">      	
+		</jar>
+    </target>
+
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: depends                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="depends">
+    </target>
+
+</project>
