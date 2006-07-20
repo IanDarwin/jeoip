@@ -239,7 +239,7 @@ public class Countries {
 		new Country("Ukraine","UA","UKR","EU"),
 		new Country("Uganda","UG","UGA","AF"),
 		new Country("United States Minor Outlying Islands","UM","UM","OC"),
-		new Country("United States","US","USA","NA"),
+		new Country("United States of America","US","USA","NA"),
 		new Country("Uruguay","UY","URY","SA"),
 		new Country("Uzbekistan","UZ","UZB","AS"),
 		new Country("Holy See (Vatican City State)","VA","VAT","EU"),
