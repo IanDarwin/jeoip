@@ -1,4 +1,5 @@
 package jeoip;
+
 public class Country {
 
 	String code2;
