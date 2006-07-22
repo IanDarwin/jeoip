@@ -1,5 +1,8 @@
 package jeoip;
 
+/**
+ * Simple holder for the Country name, codes, continents, etc.
+ */
 public class Country {
 
 	String code2;

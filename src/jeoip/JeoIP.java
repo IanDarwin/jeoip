@@ -1,3 +1,28 @@
+/*
+ * Copyright (c) Ian F. Darwin, http://www.darwinsys.com/, 2006.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS''
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+ * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS
+ * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
 package jeoip;
 
 import java.io.File;
@@ -48,10 +73,15 @@ public class JeoIP {
 	 * @param args
 	 * @throws IOException 
 	 */
-	public void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException {
+		if (args.length == 0) {
+			System.err.printf("Usage: %s IP4Addr [...]%n", "JeoIP");
+			System.exit(1);
+		}
+		JeoIP p = new JeoIP();
 		for (String host : args) {
-			System.out.printf("IPint %08x%n", ipAddrToNum(host));
-			System.out.println(host + ": " + getCountryName(host));
+			System.out.printf("Host %s, IPint %08x; Country %s%n",
+			host, ipAddrToNum(host), p.getCountryName(host));
 		}
 	}
 	
@@ -75,7 +105,7 @@ public class JeoIP {
 	}
 	
 	/** Get the name of the country for a given IP address.
-	 * @param ip
+	 * @param ip The IPV4 address as a string.
 	 * @return The country name, or "--"
 	 * @throws IOException if something goes wrong reading the database.
 	 */
@@ -85,8 +115,8 @@ public class JeoIP {
 	}
 
 	/** Get the two-letter ISO country code for a given IP
-	 * @param ip
-	 * @return
+	 * @param ip The IPV4 address as a string.
+	 * @return The country code, or "--" if unknown.
 	 * @throws IOException
 	 */
 	public String getCountryCode2(String ip) throws IOException {
@@ -95,8 +125,8 @@ public class JeoIP {
 	}
 
 	/** Get the three-letter ISO country code for a given IP
-	 * @param ip
-	 * @return
+	 * @param ip The IPV4 address as a string.
+	 * @return The country code, or "--" if unavailable.
 	 * @throws IOException
 	 */
 	public String getCountryCode3(String ip) throws IOException {
@@ -107,15 +137,15 @@ public class JeoIP {
 	/**
 	 * Not implemented.
 	 * @param ip
-	 * @return
+	 * @return The Continent
 	 */
 	public Continent getContinent(String ip) {
 		throw new IllegalArgumentException("Not written yet, sorry.");
 	}
 
 	/** Convert a remote host name to a packed integer IPV4 address.
-	 * @param remoteHost
-	 * @return
+	 * @param remoteHost The host name or IPV4 address
+	 * @return the IP address packed into an int.
 	 */
 	public static int ipAddrToNum(String remoteHost) {
 		try {
@@ -128,6 +158,9 @@ public class JeoIP {
 
 	// PRIVATE METHODS
 	
+	/** Set up the RandomAccessFile used to access the database
+	 * @throws IOException in case of error.
+	 */
 	private void setupFile(String dbFullpath) throws IOException {
 		
 		// Make sure file is readable.
@@ -141,9 +174,10 @@ public class JeoIP {
 	}
 	
 	/** Return the int country code given an IP V4 address packed into an int
-	 * @param ipv4Num In hindsight we should have done...?
+	 * The inner logic of this was adapted from MaxMind's implementation.
+	 * @param ipv4Num The IP address, packed into an int.
 	 * @return country code number
-	 * @throws IOException
+	 * @throws IOException If anything much goes wrong.
 	 */
 	private long ipToCountryCode(int ipv4Num) throws IOException {
 		
@@ -151,9 +185,8 @@ public class JeoIP {
 			throw new IOException("file has been closed");
 		}
 		
-		long x = 0;
 		int buf[] = new int[2 * recordLength];
-		long offset = 0;
+		long offset = 0, tempOffset = 0;
 
 		for (int depth = 31; depth >= 0; depth--) {
 			final long seekTo = recordLength * 2 * offset;
@@ -167,29 +200,29 @@ public class JeoIP {
 				for (int i = 0; i < buf.length; i++) {
 					System.out.printf("%02x,", buf[i]);
 				}
-				System.out.print(" x=");
+				System.out.print(" tempOffset=");
 			}
 
 			// Don't mess with these parens...
 			if ((ipv4Num & (1 << depth)) != 0) { /* take right branch */
 				if (DEBUG)
 					System.out.print('R');
-				x = ((long)(buf[3]) << 0) |
+				tempOffset = ((long)(buf[3]) << 0) |
 				((long)(buf[4]) << 8) |
 				((long)(buf[5]) << 16);
 			} else {							/* left branch */
 				if (DEBUG)
 					System.out.print('L');
-				x = ((long)(buf[0]) << 0) |
+				tempOffset = ((long)(buf[0]) << 0) |
 				((long)(buf[1]) << 8) |
 				((long)(buf[2]) << 16);
 			}
 			if (DEBUG)
-				System.out.println(x);
-			if (x >= databaseSegments) {
-				return x - COUNTRY_BEGIN;
+				System.out.println(tempOffset);
+			if (tempOffset >= databaseSegments) {
+				return tempOffset - COUNTRY_BEGIN;
 			}
-			offset = x;
+			offset = tempOffset;
 		}
 
 		/* Should be "NOTREACHED" */
@@ -197,6 +230,7 @@ public class JeoIP {
 		return 0;
 	}
 
+	/** Convert IP name to an IPV4 addrss */
 	private long ipToCountryCode(String ipName) throws IOException {
 		return ipToCountryCode(ipAddrToNum(ipName));
 	}

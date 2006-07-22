@@ -1,29 +1,86 @@
 <?xml version="1.0"?>
 <!-- ====================================================================== 
+  jeoip	
+  ======================================================================
+  -->
 
-     jeoip    
-     gives the country code/country name from an IPV4 address
-                                                                                  
-     ====================================================================== -->
-<project name="project" default="jar">
-    <description>
-            See the comment on JeoIP.java
-    </description>
+<project name="jeoip" default="jar">
 
-    <!-- ================================= 
-          target: default              
-         ================================= -->
-    <target name="jar" depends="depends" description="--> description">
-        <jar file="jeoip.jar" basedir="build"
-        	excludes="**/*Test.class"
-			update="no">      	
+	<description>
+	    Looks up the country code/country name from an IPV4 address.
+	    Usable as a command-line tool but mainly intended for use
+	    in e.g., servlets or other code
+	</description>
+
+	<property name="V" value="0.3"/>
+	<property name="src" value="src"/>
+	<property name="build" value="build"/>
+	<property name="tarfile" value="jeoip-${V}.tar.gz"/>
+	<property name="junit.jar" 
+		value="/usr/local/share/java/classes/junit-3.8.1/junit.jar"/>
+
+	<!-- ================================= 
+	 target: jar: build the executable jar			  
+	================================= -->
+	<target name="jar" depends="compile"
+		description="Create the binary Jar">
+		<jar file="jeoip.jar" basedir="build"
+		manifest="Manifest.mf"
+			excludes="**/*Test.class"
+			update="no">	  	
 		</jar>
-    </target>
+	</target>
 
-    <!-- - - - - - - - - - - - - - - - - - 
-          target: depends                      
-         - - - - - - - - - - - - - - - - - -->
-    <target name="depends">
-    </target>
+	<!-- - - - - - - - - - - - - - - - - - 
+	  target: compile: build the source into .class
+	 - - - - - - - - - - - - - - - - - -->
+	<target name="compile" depends="init">
+	    <javac destdir="build" srcdir="src"/>
+	</target>
+
+	<target name="init">
+	    <mkdir dir="build"/>
+	</target>
+
+	<!-- - - - - - - - - - - - - - - - - - 
+	  target: regress: run JUnit tests
+	 - - - - - - - - - - - - - - - - - -->
+	<target name="regress" depends="compile">
+	    <junit printsummary="yes" fork="yes" haltonfailure="yes">
+		<classpath>
+			<!--pathelement file="${junit.jar}"/-->
+			<pathelement location="${build}"/>
+		</classpath>
+		<formatter type="plain"/>
+		<test name="JeoIPTest"/>
+	    </junit>
+	</target>
+
+	<!-- - - - - - - - - - - - - - - - - - 
+	  target: docs: format API docs
+	 - - - - - - - - - - - - - - - - - -->
+	<target name="docs" depends="compile">
+		<javadoc sourcepath="${src}" destdir="${build}/docs"
+			windowtitle="JeoIP - Lookup IPV4 by country"
+			Version="true" Author="true" Use="true">
+			<packageset dir="${src}" defaultexcludes="yes">
+				<include name="jeoip/**" />
+				<exclude name="regress/**"/>
+			</packageset>
+		</javadoc>
+		<!--copy file="html/index.html" todir="${build}/docs"/-->
+	</target>
+
+	<!-- - - - - - - - - - - - - - - - - - 
+	  target: dist: build source distrib
+	 - - - - - - - - - - - - - - - - - -->
+	<target name="dist" depends="docs">
+		<delete file="${tarfile}"/>
+		<tar destfile="${tarfile}"
+		    basedir=".."  
+		    includes="jeoip/build.xml,jeoip/Manifest.mf,jeoip/src/**,jeoip/unix/**"
+		    compression="gzip">
+		</tar>
+	</target>
 
 </project>

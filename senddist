@@ -1,0 +1,6 @@
+#!/bin/sh
+
+set -x
+
+cp jeoip-0.3.tar.gz $ws/darwinsysweb/WebContent/freeware/
+cp jeoip-0.3.tar.gz /usr/ports/distfiles
