@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<!-- ====================================================================== 
-  jeoip	
+<!-- ======================================================================
+  jeoip
   ======================================================================
   -->
 
@@ -16,22 +16,22 @@
 	<property name="src" value="src"/>
 	<property name="build" value="build"/>
 	<property name="tarfile" value="jeoip-${V}.tar.gz"/>
-	<property name="junit.jar" 
+	<property name="junit.jar"
 		value="/usr/local/share/java/classes/junit-3.8.1/junit.jar"/>
 
-	<!-- ================================= 
-	 target: jar: build the executable jar			  
+	<!-- =================================
+	 target: jar: build the executable jar
 	================================= -->
 	<target name="jar" depends="compile"
 		description="Create the binary Jar">
 		<jar file="jeoip.jar" basedir="build"
 		manifest="Manifest.mf"
 			excludes="**/*Test.class"
-			update="no">	  	
+			update="no">
 		</jar>
 	</target>
 
-	<!-- - - - - - - - - - - - - - - - - - 
+	<!-- - - - - - - - - - - - - - - - - -
 	  target: compile: build the source into .class
 	 - - - - - - - - - - - - - - - - - -->
 	<target name="compile" depends="init">
@@ -42,24 +42,25 @@
 	    <mkdir dir="build"/>
 	</target>
 
-	<!-- - - - - - - - - - - - - - - - - - 
+	<!-- - - - - - - - - - - - - - - - - -
 	  target: regress: run JUnit tests
 	 - - - - - - - - - - - - - - - - - -->
 	<target name="regress" depends="compile">
+	    <javac destdir="build" srcdir="regress"/>
 	    <junit printsummary="yes" fork="yes" haltonfailure="yes">
 		<classpath>
-			<!--pathelement file="${junit.jar}"/-->
 			<pathelement location="${build}"/>
 		</classpath>
 		<formatter type="plain"/>
-		<test name="JeoIPTest"/>
+		<test name="jeoip.JeoIPTest"/>
 	    </junit>
+	    <delete file="${build}/jeoip/JeoIPTest.class"/>
 	</target>
 
-	<!-- - - - - - - - - - - - - - - - - - 
+	<!-- - - - - - - - - - - - - - - - - -
 	  target: docs: format API docs
 	 - - - - - - - - - - - - - - - - - -->
-	<target name="docs" depends="compile">
+	<target name="docs" depends="regress">
 		<javadoc sourcepath="${src}" destdir="${build}/docs"
 			windowtitle="JeoIP - Lookup IPV4 by country"
 			Version="true" Author="true" Use="true">
@@ -71,14 +72,14 @@
 		<!--copy file="html/index.html" todir="${build}/docs"/-->
 	</target>
 
-	<!-- - - - - - - - - - - - - - - - - - 
+	<!-- - - - - - - - - - - - - - - - - -
 	  target: dist: build source distrib
 	 - - - - - - - - - - - - - - - - - -->
 	<target name="dist" depends="docs">
 		<delete file="${tarfile}"/>
 		<tar destfile="${tarfile}"
-		    basedir=".."  
-		    includes="jeoip/build.xml,jeoip/Manifest.mf,jeoip/src/**,jeoip/unix/**"
+		    basedir=".."
+		    includes="jeoip/build.xml,jeoip/Manifest.mf,jeoip/src/**,jeoip/regress/**,jeoip/unix/**"
 		    compression="gzip">
 		</tar>
 	</target>
