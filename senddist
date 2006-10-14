@@ -2,5 +2,22 @@
 
 set -x
 
-cp jeoip-0.3.tar.gz $ws/darwinsysweb/WebContent/freeware/
-cp jeoip-0.3.tar.gz /usr/ports/distfiles
+DIR=$ws/darwinsysweb/WebContent/freeware/
+DIST=jeoip-0.3.tar.gz
+cp ${DIST} ${DIR}
+
+cd ${DIR}
+
+webinst ${DIST}
+
+cp ${DIST} /usr/ports/distfiles/
+
+cd /usr/ports/mystuff/geo/jeoip
+
+make makesum
+
+sudo make clean
+
+sudo make clean=package 
+
+sudo make package
