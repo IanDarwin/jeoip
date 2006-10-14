@@ -47,6 +47,17 @@ import java.net.UnknownHostException;
  * <p>
  * On OpenBSD, the port/package "GeoIP" (category net) installs the database
  * and the C programs to use it.
+ * <p>
+ * Once you have GeoIP installed, you can use JeoIP; here is an example
+ * from a (non-optimal, non-well-structured) JSP:
+ * <p><pre>
+ * &lt;font size="-4">
+ * Your IP address is &lt;%= request.getRemoteAddr() %>.
+ * <br/>
+ * You are located in
+ * &lt;%= new jeoip.JeoIP().getCountryName(request.getRemoteAddr()) %>.
+ * &lt;/font>
+ * </pre>
  * @author Ian Darwin
  */
 public class JeoIP {
@@ -55,55 +66,38 @@ public class JeoIP {
 
 	/** This is the default location when you install the OpenBSD port/package. */
 	public static final String DEFAULT_DIR = "/usr/local/share/examples/GeoIP/";
-	
+
 	public static final String DB = "GeoIP.dat";
-	
+
 	private final long COUNTRY_BEGIN = 16776960L;
-	
+
 	private final String dbFullPath;
 
 	private RandomAccessFile dbIO;
-	
+
 	private final long databaseSegments = COUNTRY_BEGIN;
 
 	private final int recordLength = 3;
-	
-	/**
-	 * Demonstration/utility to run the main part.
-	 * @param args
-	 * @throws IOException 
-	 */
-	public static void main(String[] args) throws IOException {
-		if (args.length == 0) {
-			System.err.printf("Usage: %s IP4Addr [...]%n", "JeoIP");
-			System.exit(1);
-		}
-		JeoIP p = new JeoIP();
-		for (String host : args) {
-			System.out.printf("Host %s, IPint %08x; Country %s%n",
-			host, ipAddrToNum(host), p.getCountryName(host));
-		}
-	}
-	
+
 	public JeoIP(String dir) throws IOException {
 		dbFullPath = dir + "/" + DB;
-		
+
 		setupFile(dbFullPath);
 	}
-	
+
 	public JeoIP() throws IOException {
 		this(DEFAULT_DIR);
 	}
-	
+
 	public void close() throws IOException {
 		dbIO.close();
 		dbIO = null;
 	}
-	
+
 	public void setDirectory(String dir) throws IOException {
 		setupFile(dir + "/" + DB);
 	}
-	
+
 	/** Get the name of the country for a given IP address.
 	 * @param ip The IPV4 address as a string.
 	 * @return The country name, or "--"
@@ -133,7 +127,7 @@ public class JeoIP {
 		Country c = Countries.getCountry((int)ipToCountryCode(ip));
 		return (c != null ? c.name : null);
 	}
-	
+
 	/**
 	 * Not implemented.
 	 * @param ip
@@ -157,12 +151,12 @@ public class JeoIP {
 	}
 
 	// PRIVATE METHODS
-	
+
 	/** Set up the RandomAccessFile used to access the database
 	 * @throws IOException in case of error.
 	 */
 	private void setupFile(String dbFullpath) throws IOException {
-		
+
 		// Make sure file is readable.
 		File dbFile = new File(dbFullPath);
 		if (!dbFile.exists() || !dbFile.canRead()) {
@@ -172,7 +166,7 @@ public class JeoIP {
 		// Set up random access file.
 		dbIO = new RandomAccessFile(dbFile, "r");
 	}
-	
+
 	/** Return the int country code given an IP V4 address packed into an int
 	 * The inner logic of this was adapted from MaxMind's implementation.
 	 * @param ipv4Num The IP address, packed into an int.
@@ -180,11 +174,11 @@ public class JeoIP {
 	 * @throws IOException If anything much goes wrong.
 	 */
 	private long ipToCountryCode(int ipv4Num) throws IOException {
-		
+
 		if (dbIO == null) {
 			throw new IOException("file has been closed");
 		}
-		
+
 		int buf[] = new int[2 * recordLength];
 		long offset = 0, tempOffset = 0;
 

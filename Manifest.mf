@@ -1,1 +1,1 @@
-Main-class: jeoip.JeoIP
+Main-class: jeoip.Main
