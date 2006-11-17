@@ -35,7 +35,7 @@
 	  target: compile: build the source into .class
 	 - - - - - - - - - - - - - - - - - -->
 	<target name="compile" depends="init">
-	    <javac destdir="build" srcdir="src"/>
+	    <javac destdir="build" srcdir="src" source="1.5" target="1.5"/>
 	</target>
 
 	<target name="init">
@@ -47,7 +47,7 @@
 	 - - - - - - - - - - - - - - - - - -->
 	<target name="regress" depends="compile"
 		description="Run regression tasks">
-	    <javac destdir="build" srcdir="regress"/>
+	    <javac destdir="build" srcdir="regress" source="1.5" target="1.5"/>
 	    <junit printsummary="yes" fork="yes" haltonfailure="yes">
 		<classpath>
 			<pathelement location="${build}"/>
