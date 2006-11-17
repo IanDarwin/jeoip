@@ -1,6 +1,10 @@
 #!/bin/sh
 
 # javaPathHelper finds where Java is installed
-JAVA_CMD=`javaPathHelper -c jeoip`
+JAVACMD=`javaPathHelper -c jeoip`
 
-${JAVA_CMD} -jar /usr/local/share/java/jeoip/jeoip.jar $*
+if [ -z "${JAVACMD}" ]; then
+	exit 1
+fi
+
+${JAVACMD} -jar /usr/local/share/java/jeoip/jeoip.jar $*
