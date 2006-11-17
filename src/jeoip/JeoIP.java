@@ -82,7 +82,14 @@ public class JeoIP {
 	public JeoIP(String dir) throws IOException {
 		dbFullPath = dir + "/" + DB;
 
-		setupFile(dbFullPath);
+		// Make sure file is readable.
+		File dbFile = new File(dbFullPath);
+		if (!dbFile.exists() || !dbFile.canRead()) {
+			throw new IOException("File not readable: " + dbFullPath);
+		}
+		
+		// Set up random access file.
+		dbIO = new RandomAccessFile(dbFile, "r");
 	}
 
 	public JeoIP() throws IOException {
@@ -92,10 +99,6 @@ public class JeoIP {
 	public void close() throws IOException {
 		dbIO.close();
 		dbIO = null;
-	}
-
-	public void setDirectory(String dir) throws IOException {
-		setupFile(dir + "/" + DB);
 	}
 
 	/** Get the name of the country for a given IP address.
@@ -151,21 +154,6 @@ public class JeoIP {
 	}
 
 	// PRIVATE METHODS
-
-	/** Set up the RandomAccessFile used to access the database
-	 * @throws IOException in case of error.
-	 */
-	private void setupFile(String dbFullpath) throws IOException {
-
-		// Make sure file is readable.
-		File dbFile = new File(dbFullPath);
-		if (!dbFile.exists() || !dbFile.canRead()) {
-			throw new IOException("File not readable: " + dbFullPath);
-		}
-
-		// Set up random access file.
-		dbIO = new RandomAccessFile(dbFile, "r");
-	}
 
 	/** Return the int country code given an IP V4 address packed into an int
 	 * The inner logic of this was adapted from MaxMind's implementation.

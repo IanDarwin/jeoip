@@ -12,7 +12,7 @@
 	    in e.g., servlets or other code
 	</description>
 
-	<property name="V" value="0.4"/>
+	<property name="V" value="0.5"/>
 	<property name="src" value="src"/>
 	<property name="build" value="build"/>
 	<property name="tarfile" value="jeoip-${V}.tar.gz"/>
