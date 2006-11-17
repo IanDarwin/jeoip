@@ -12,7 +12,7 @@
 	    in e.g., servlets or other code
 	</description>
 
-	<property name="V" value="0.3"/>
+	<property name="V" value="0.4"/>
 	<property name="src" value="src"/>
 	<property name="build" value="build"/>
 	<property name="tarfile" value="jeoip-${V}.tar.gz"/>
@@ -45,7 +45,8 @@
 	<!-- - - - - - - - - - - - - - - - - -
 	  target: regress: run JUnit tests
 	 - - - - - - - - - - - - - - - - - -->
-	<target name="regress" depends="compile">
+	<target name="regress" depends="compile"
+		description="Run regression tasks">
 	    <javac destdir="build" srcdir="regress"/>
 	    <junit printsummary="yes" fork="yes" haltonfailure="yes">
 		<classpath>
@@ -60,7 +61,8 @@
 	<!-- - - - - - - - - - - - - - - - - -
 	  target: docs: format API docs
 	 - - - - - - - - - - - - - - - - - -->
-	<target name="docs" depends="regress">
+	<target name="docs" depends="regress"
+		description="Format API docs">
 		<javadoc sourcepath="${src}" destdir="${build}/docs"
 			windowtitle="JeoIP - Lookup IPV4 by country"
 			Version="true" Author="true" Use="true">
@@ -75,7 +77,8 @@
 	<!-- - - - - - - - - - - - - - - - - -
 	  target: dist: build source distrib
 	 - - - - - - - - - - - - - - - - - -->
-	<target name="dist" depends="docs">
+	<target name="dist" depends="docs"
+		description="generate tar file of distribution">
 		<delete file="${tarfile}"/>
 		<tar destfile="${tarfile}"
 		    basedir=".."
