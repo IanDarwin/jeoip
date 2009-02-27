@@ -32,7 +32,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 /**
- * A class for looking up the country in which an IPV4 address is located.
+ * Look up the country in which an IPV4 address is located.
  * <p>
  * Works by reading the GeoIP country database, a free database that
  * you can download from GeoIP.com, at
@@ -87,7 +87,7 @@ public class JeoIP {
 		if (!dbFile.exists() || !dbFile.canRead()) {
 			throw new IOException("File not readable: " + dbFullPath);
 		}
-		
+
 		// Set up random access file.
 		dbIO = new RandomAccessFile(dbFile, "r");
 	}
