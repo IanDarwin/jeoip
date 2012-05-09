@@ -49,7 +49,9 @@ import java.net.UnknownHostException;
  * and the C programs to use it.
  * <p>
  * Once you have GeoIP installed, you can use JeoIP; here is an example
- * from a (non-optimal, non-well-structured) JSP:
+ * from a (non-optimal, non-well-structured) JSP (in real life you'd obviously
+ * cache the JeoIP instance in the ServletContext or something like a Spring
+ * Context stored in the ServletContext).
  * <p><pre>
  * &lt;font size="-4">
  * Your IP address is &lt;%= request.getRemoteAddr() %>.
