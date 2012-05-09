@@ -26,6 +26,7 @@
 package jeoip;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.net.InetAddress;
@@ -81,17 +82,21 @@ public class JeoIP {
 
 	private final int recordLength = 3;
 
-	public JeoIP(String dir) throws IOException {
+	public JeoIP(String dir) {
 		dbFullPath = dir + "/" + DB;
 
 		// Make sure file is readable.
 		File dbFile = new File(dbFullPath);
 		if (!dbFile.exists() || !dbFile.canRead()) {
-			throw new IOException("File not readable: " + dbFullPath);
+			throw new ExceptionInInitializerError("File not readable: " + dbFullPath);
 		}
 
 		// Set up random access file.
-		dbIO = new RandomAccessFile(dbFile, "r");
+		try {
+			dbIO = new RandomAccessFile(dbFile, "r");
+		} catch (FileNotFoundException e) {
+			throw new ExceptionInInitializerError(/*"Random failure in RandomAccessFile constructor",*/ e);
+		}
 	}
 
 	public JeoIP() throws IOException {
