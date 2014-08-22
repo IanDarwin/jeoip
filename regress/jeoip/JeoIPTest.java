@@ -2,12 +2,14 @@ package jeoip;
 
 import java.io.IOException;
 
-import junit.framework.TestCase;
+import org.junit.*;
 
-public class JeoIPTest extends TestCase {
+import static org.junit.Assert.*;
+
+public class JeoIPTest {
 	JeoIP target;
 
-	@Override
+	@Before
 	protected void setUp() throws Exception {
 		target = new JeoIP();
 	}
@@ -21,6 +23,7 @@ public class JeoIPTest extends TestCase {
 		assertEquals("United States of America", country);
 	}
 
+	@After
 	public void tearDown() throws IOException {
 		target.close();
 	}
