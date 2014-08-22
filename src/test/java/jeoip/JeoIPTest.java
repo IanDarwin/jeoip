@@ -10,10 +10,11 @@ public class JeoIPTest {
 	JeoIP target;
 
 	@Before
-	protected void setUp() throws Exception {
+	public void setUp() throws Exception {
 		target = new JeoIP();
 	}
 
+	@Test
 	public void testIP() throws Exception {
 		String country = target.getCountryName("www.darwinsys.com");
 		assertEquals("Canada", country);
@@ -25,6 +26,8 @@ public class JeoIPTest {
 
 	@After
 	public void tearDown() throws IOException {
-		target.close();
+		if (target != null) {
+			target.close();
+		}
 	}
 }

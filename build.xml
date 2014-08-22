@@ -1,78 +1,16 @@
 <?xml version="1.0"?>
-<!-- ======================================================================
-  jeoip
+<!--
+  ======================================================================
+  jeoip - build.xml only for building distfiles, rm when this moves to pom
   ======================================================================
   -->
 
 <project name="jeoip" default="jar">
 
-	<description>
-	    Looks up the country code/country name from an IPV4 address.
-	    Usable as a command-line tool but mainly intended for use
-	    in e.g., servlets or other code
-	</description>
-
-	<property name="V" value="0.5"/>
+	<property name="V" value="0.5.1"/>
 	<property name="src" value="src"/>
 	<property name="build" value="build"/>
 	<property name="tarfile" value="jeoip-${V}.tar.gz"/>
-	<property name="junit.jar"
-		value="/usr/local/share/java/classes/junit-3.8.1/junit.jar"/>
-
-	<!-- =================================
-	 target: jar: build the executable jar
-	================================= -->
-	<target name="jar" depends="compile"
-		description="Create the binary Jar">
-		<jar file="jeoip.jar" basedir="build"
-		manifest="Manifest.mf"
-			excludes="**/*Test.class"
-			update="no">
-		</jar>
-	</target>
-
-	<!-- - - - - - - - - - - - - - - - - -
-	  target: compile: build the source into .class
-	 - - - - - - - - - - - - - - - - - -->
-	<target name="compile" depends="init">
-	    <javac destdir="build" srcdir="src" source="1.5" target="1.5"/>
-	</target>
-
-	<target name="init">
-	    <mkdir dir="build"/>
-	</target>
-
-	<!-- - - - - - - - - - - - - - - - - -
-	  target: regress: run JUnit tests
-	 - - - - - - - - - - - - - - - - - -->
-	<target name="regress" depends="compile"
-		description="Run regression tasks">
-	    <javac destdir="build" srcdir="regress" source="1.5" target="1.5"/>
-	    <junit printsummary="yes" fork="yes" haltonfailure="yes">
-		<classpath>
-			<pathelement location="${build}"/>
-		</classpath>
-		<formatter type="plain"/>
-		<test name="jeoip.JeoIPTest"/>
-	    </junit>
-	    <delete file="${build}/jeoip/JeoIPTest.class"/>
-	</target>
-
-	<!-- - - - - - - - - - - - - - - - - -
-	  target: docs: format API docs
-	 - - - - - - - - - - - - - - - - - -->
-	<target name="docs" depends="regress"
-		description="Format API docs">
-		<javadoc sourcepath="${src}" destdir="${build}/docs"
-			windowtitle="JeoIP - Lookup IPV4 by country"
-			Version="true" Author="true" Use="true">
-			<packageset dir="${src}" defaultexcludes="yes">
-				<include name="jeoip/**" />
-				<exclude name="regress/**"/>
-			</packageset>
-		</javadoc>
-		<!--copy file="html/index.html" todir="${build}/docs"/-->
-	</target>
 
 	<!-- - - - - - - - - - - - - - - - - -
 	  target: dist: build source distrib
