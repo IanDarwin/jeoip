@@ -1,0 +1,19 @@
+= jeoip
+
+This code gives access to the GeoIP free database of IP-to-country geolocation data.
+
+The jeoip project was written before GeoIP produced their own Java library.
+It is also completely free, under the BSD 2-clause license.
+
+See also: http://geoip.com/
+
+== Running
+
+Before you can run the tests or the library, you must have the GeoIP Country database installed.
+On OpenBSD you can satisfy this requirement by installing the GeoIP "db" flavor.
+On other systems you'll have to install it in `/usr/local/share/examples/GeoIP/GeoIP.dat`.
+
+== Notice
+
+This product consumes GeoLite data created by MaxMind, available from http://www.maxmind.com .
+
