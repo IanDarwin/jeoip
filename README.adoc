@@ -10,7 +10,10 @@ See also: http://geoip.com/
 == Running
 
 Before you can run the tests or the library, you must have the GeoIP Country database installed.
-On OpenBSD you can satisfy this requirement by installing the GeoIP "db" flavor.
+On OpenBSD you can satisfy this requirement by installing the GeoIP data package, i.e., 
+
+	doas root pkg_add geolite-country
+
 On other systems you'll have to install it in `/usr/local/share/examples/GeoIP/GeoIP.dat`.
 
 == Notice
