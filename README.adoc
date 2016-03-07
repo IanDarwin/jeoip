@@ -2,8 +2,7 @@
 
 This code gives access to the GeoIP free database of IP-to-country geolocation data.
 
-The jeoip project was written before GeoIP produced their own Java library.
-It is also completely free, under the BSD 2-clause license.
+It is completely free, under the BSD 2-clause license.
 
 See also: http://geoip.com/
 
