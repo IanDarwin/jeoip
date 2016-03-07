@@ -4,7 +4,7 @@ This code gives access to the GeoIP free database of IP-to-country geolocation d
 
 It is free software, under the BSD 2-clause license.
 
-See also: http://geoip.com/
+See also: http://dev.maxmind.com/geoip/
 
 == Running
 
