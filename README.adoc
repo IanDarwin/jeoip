@@ -2,7 +2,7 @@
 
 This code gives access to the GeoIP free database of IP-to-country geolocation data.
 
-It is completely free, under the BSD 2-clause license.
+It is free software, under the BSD 2-clause license.
 
 See also: http://geoip.com/
 
@@ -11,12 +11,12 @@ See also: http://geoip.com/
 Before you can run the tests or the library, you must have the GeoIP Country database installed.
 On OpenBSD you can satisfy this requirement by installing the GeoIP data package, i.e., 
 
-	doas root pkg_add geolite-country
+	doas pkg_add geolite-country
 
-On other systems you'll have to install it in `/usr/local/share/examples/GeoIP/GeoIP.dat` or else
-set the environment variable `GEOIP_DIR` to the directory containing `GeoIP.dat`.
+On other systems you'll have to install `GeoIP.dat` in `/usr/local/share/examples/GeoIP/GeoIP.dat`,
+or in some other directory that is pointed to by the environment variable `GEOIP_DIR`.
 
 == Notice
 
-This product consumes GeoLite data created by MaxMind, available from http://www.maxmind.com .
+This product uses GeoLite data created by MaxMind, available from http://www.maxmind.com .
 
