@@ -46,8 +46,8 @@ import java.net.UnknownHostException;
  * MaxMind's download package includes an update program that they suggest you
  * run monthly.
  * <p>
- * On OpenBSD, the port/package "GeoIP" (category net) installs the database
- * and the C programs to use it.
+ * On OpenBSD, the port/package "geolite" (category net) installs the database
+ * and the C programs in "GeoIP" to use it.
  * <p>
  * Once you have GeoIP installed, you can use JeoIP; here is an example
  * from a (non-optimal, non-well-structured) JSP (in real life you'd obviously
@@ -68,7 +68,7 @@ public class JeoIP {
 	private final boolean DEBUG = false;
 
 	/** This is the default location when you install the OpenBSD port/package. */
-	public static final String DEFAULT_DIR = "/usr/local/share/examples/GeoIP/";
+	public static final String DEFAULT_DIR = "/usr/local/share/examples/GeoIP";
 
 	public static final String DB = "GeoIP.dat";
 
@@ -100,7 +100,7 @@ public class JeoIP {
 	}
 
 	public JeoIP() throws IOException {
-		this(DEFAULT_DIR);
+		this((String)(System.getenv("GEOIP_DIR") == null ? DEFAULT_DIR : System.getenv("GEOIP_DIR")));
 	}
 
 	public void close() throws IOException {
