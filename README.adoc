@@ -14,7 +14,8 @@ On OpenBSD you can satisfy this requirement by installing the GeoIP data package
 
 	doas root pkg_add geolite-country
 
-On other systems you'll have to install it in `/usr/local/share/examples/GeoIP/GeoIP.dat`.
+On other systems you'll have to install it in `/usr/local/share/examples/GeoIP/GeoIP.dat` or else
+set the environment variable `GEOIP_DIR` to the directory containing `GeoIP.dat`.
 
 == Notice
 
