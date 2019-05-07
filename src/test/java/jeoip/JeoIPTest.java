@@ -15,13 +15,17 @@ public class JeoIPTest {
 	}
 
 	@Test
-	public void testIP() throws Exception {
-		String country = target.getCountryName("www.darwinsys.com");
-		assertEquals("Canada", country);
-		country = target.getCountryName("www.staffs.ac.uk");
-		assertEquals("United Kingdom", country);
-		country = target.getCountryName("72.5.124.61"); // sun.com
-		assertEquals("United States of America", country);
+	public void testDarwin() throws Exception {
+		String actual = target.getCountryName("www.darwinsys.com");
+		assertEquals("Canada", actual);
+	}
+	public void testStaffs() throws Exception {
+		String actual = target.getCountryName("www.gov.uk");
+		assertEquals("United Kingdom", actual);
+	}
+	public void testOracle() throws Exception {
+		String actual = target.getCountryName("72.5.124.61"); // sun.com
+		assertEquals("United States of America", actual);
 	}
 
 	@After
