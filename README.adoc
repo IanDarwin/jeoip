@@ -1,8 +1,11 @@
 = jeoip
 
 *Discontinued* - MaxMind changed the data format and they provide
-their own free Java API.
+their own "free" Java API (registration required).
 Please use https://github.com/maxmine/GeoIP2-java.
+
+If somebody figures out the format of the GeoIP2 data without looking
+at their source code, I might accept a pull request for updating the code.
 
 == Legacy Information
 
