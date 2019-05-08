@@ -1,5 +1,11 @@
 = jeoip
 
+*Discontinued* - MaxMind changed the data format and they provide
+their own free Java API.
+Please use https://github.com/maxmine/GeoIP2-java.
+
+== Legacy Information
+
 This code gives access to the GeoIP free database of IP-to-country geolocation data.
 
 It is free software, under the BSD 2-clause license.
